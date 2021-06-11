@@ -1,6 +1,9 @@
 package wordcount
 
 import scala.io.{BufferedSource, Source}
+import java.nio.file.{Files, Paths}
+
+//import wordcount.WordCount.Res // for byte-reading....
 
 // Unlike Java it's not required to have a class that
 // is named the same way as the file
@@ -11,11 +14,11 @@ object Main {
   // Do it on your own risk :)
   def main(args: Array[String]): Unit = {
     if (args.length == 2) args(0) match {
-      case "-c" => WordCount.countCharacters(Source.fromFile(args(1)))
-      case "-l" => print("line count")
-      case "-m" => print("character count")
+      case "-c" => print (WordCount.countBytes(args(1)))
+      case "-l" => print (WordCount.countLines(Source.fromFile(args(1))))
+      case "-m" => print (WordCount.countCharacters(Source.fromFile(args(1))))
       case "-w" => print("word count")
-      case "-L" => print("length of the longest line")
+      case "-L" => print (WordCount.findLongestLine(Source.fromFile(args(1))))
       case _ => printHelp
     } else {
       printHelp
@@ -30,31 +33,32 @@ object Main {
 // you may use this object to store some application-related
 // functions, but don't insist on that design
 object WordCount {
-
-  // ??? Leaves function unimplemented. It makes compilation
-  // pass but you will get something like this:
-  // scala.NotImplementedError: an implementation is missing
-  def countLines(buf: BufferedSource): Int = {
-    var count = 0
-    while (buf.getLines().hasNext)
-      buf.next()
-      count += 1
+  def countBytes(path: String): Any = { // TODO: FIXME does not look great.
+    val is = Files.newInputStream(Paths.get(path))
+    var count = 0: Long
+    var av = 0: Long
+    while ( {
+      av = is.available(); av
+    } > 0) {
+      count += is.skip(av)
+    }
     count
   }
 
-  def countWords(text: String): Int = {
-    return 3
-    //text.split
+  def findLongestLine(buf: BufferedSource): Int = {
+      // buf.getLines().maxBy(_.length) -> returns longest line, but probably might consume much more memory
+    buf.getLines().map(_.length).max
   }
+
+  def countLines(buf: BufferedSource): Int = {
+    buf.getLines().count(_ => true)
+  }
+
+  def countWords(text: String): Int = ???
 
   def countCharacters(buf : BufferedSource) : Int = {
-    var count = 0
-    while (buf.hasNext)
-      count += 1
-      buf.next()
-    count
+    buf.count(_ => true)
   }
-
 }
 
 object Res {

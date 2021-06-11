@@ -1,1 +1,4 @@
-# scala-exercises
+scala-exercises
+================= 
+
+Just a test.
