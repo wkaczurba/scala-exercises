@@ -63,5 +63,63 @@ object Ch2_emptyList {
 }
 
 object Ch2_Options {
+  val strangeList = List.range(1, 22449, 19)
+  val opt = strangeList.findLast(_ % 23 == 7)
+
+  def main(args : Array[String]) : Unit = {
+    optionsExample()
+    flattening()
+  }
+
+  def optionsExample() : Unit = {
+    println("Looking for a strange number: " + opt.getOrElse("but nothing found"))
+  }
+
+  def flattening() : Unit = {
+    val x : Option[Option[Option[String]]] = Some(Some(Some("Abc")))
+
+    println(x.flatten) // gets: Some(Some(Abc))
+
+    // println(x.flatMap( msg => "$msg" )) // FIXME: Talk to Paul on how to fix this one.
+  }
+}
+
+object Ch2_Tuples {
+  // main issue: tuples are not aliased
+  type Point = (Double, Double)
+
+  def drawLine(a : Point, b : Point) : Unit = {
+    println(a._1, a._2) // ugly a bit...
+  }
+
+  val points : Array[Point] = Array( (1, 2), (3, 4), (5, 6))
+
+  def main(args : Array[String]) = {
+    points.foreach(p => println(p._1 + " " + p._2)) // a bit ugly.
+
+    println("Group by:")
+    println(points.groupBy(_._2)) // TODO: Try more..
+  }
+
+  println("points foreach case(x, y) => { ... }") //
+  points foreach { case (x, y) => {
+    println(s"point.x=$x, point.y=$y")
+  }}
+}
+
+// TODO: Discuss  ch2 - 18 where it begins "pretty haskellish" -> what is this about? I dont code Erland and Haskell.
+
+object Ch2_Tuples_copying {
+  // updating an element in tuple:
+
+  val dog = ("Rex", 13)
+  val olderDog = dog.copy(_2 = 15) // updates + modifies second element; FIXME: TO Paul - there is a mistake in the code "tuple.copy" should be "dog.copy"
+
+  def main(args : Array[String]) = {
+    println("dog:" + dog)
+    println("olderDog: " + olderDog)
+  }
 
 }
+
+// TODO: More examples:
