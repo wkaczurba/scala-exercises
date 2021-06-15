@@ -1,5 +1,7 @@
 package own.Ch3
 
+import own.Ch3.ch3_ref_or_value_passing.Cl1
+
 import scala.collection.immutable.NumericRange
 
 // TODO: LInks:
@@ -99,7 +101,12 @@ object  ch3_passing_functions_p24 {
 
 // TODO: Ask Paul: should we use type annotation after each function - as IntelliJ asks for that?
 
-
+// TODO: Move this into separate main file.
+// TODO: MOre on currying:
+//   1. http://lukajcb.github.io/blog/scala/2016/03/08/a-real-world-currying-example.html
+//   2. https://en.wikibooks.org/wiki/Scala/Currying
+//   3. http://fruzenshtein.com/scala-currying-functions/
+//   4. https://alvinalexander.com/scala/scala-curried-partially-applied-functions-how-compiled-scalac/
 object ch3_currying {
   // Single multi-argument function is segregated to chained single argument function calls...
 
@@ -115,5 +122,59 @@ object ch3_currying {
 
     val greet = concat("Hello ")_ // lambda
     println(greet("Roman")) // Hello ROman
+  }
+}
+
+object ch3_closures {
+  // TODO: review the following resources:
+  // - https://alvinalexander.com/scala/how-to-use-closures-in-scala-fp-examples/
+  // - https://www.slideshare.net/knoldus/functions-closures
+  // - https://openhome.cc/eGossip/Blog/UnderstandingLambdaClosure4.html
+
+}
+// TODO: Review this one: http://twitter.github.io/scala_school/pattern-matching-and-functional-composition.html#composition
+
+object ch3_ref_or_value_passing {
+  class Cl1 (name : String, age : Int);
+
+  def main(args : Array[String]) = {
+    val x : AnyRef = ""
+    //val y : AnyRef = 5
+    //val p : AnyVal = "xxx" // How this is possible?; AnyVal vs String..?
+    //val q = AnyVal = new Cl1("monster1", 44)
+    val q : AnyRef = new Cl1("monster1", 44)
+
+    // TODO: WHat is a difference between AnyVal and AnyRef? - it would be good to have a clear definition; what are value classes? -> Scala Language Specification, section 12.2
+
+    // TODO: Read about this ones:
+    // - https://www.scala-lang.org/api/current/scala/AnyRef.html
+    // - https://www.scala-lang.org/api/current/scala/AnyVal.html
+    // call by name: https://tpolecat.github.io/2014/06/26/call-by-name.html and http://locrianmode.blogspot.com/2011/07/scala-by-name-parameter.html
+    // call by need (memoization): https://en.wikipedia.org/wiki/Memoization
+    // call by future: "Evaluation strategy where arguments are evaluated concurrently inside the function body. Scala has Futures so it also adopts this strategy."
+  }
+}
+
+object ch3_lazy_init {
+
+  class Cl1(name :String) { println ("initialised" + name)}
+
+//  lazy val bob : Cl1 = new Cl1("Bob")
+
+  def main(args : Array[String]) = {
+    lazy val bob : Cl1 = new Cl1("Bob")
+    val jeffrey = new Cl1("Jeffrey")
+
+    println("code started")
+
+    Thread.sleep(2000)
+    println("jeff" + jeffrey)
+    println("bob: " + bob)
+
+    // TODO: More reading:
+    //  https://matt.might.net/articles/implementing-laziness/
+    //  https://blog.codecentric.de/en/2016/02/lazy-vals-scala-look-hood/
+
+
   }
 }
