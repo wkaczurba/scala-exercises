@@ -113,7 +113,7 @@ object Ch2_Tuples_copying {
   // updating an element in tuple:
 
   val dog = ("Rex", 13)
-  val olderDog = dog.copy(_2 = 15) // updates + modifies second element; FIXME: TO Paul - there is a mistake in the code "tuple.copy" should be "dog.copy"
+  val olderDog = dog.copy(_2 = 15) // updates + modifies second element ; FIXME: TO Paul - there is a mistake in the code "tuple.copy" should be "dog.copy"
 
   def main(args : Array[String]) = {
     println("dog:" + dog)

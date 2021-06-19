@@ -1,9 +1,6 @@
 package own.Ch1
 
 import java.io.FileInputStream
-import java.lang.RuntimeException
-
-//import jdk.internal.joptsimple.internal.Strings
 
 //sealed class Claws
 //  case class c extends Claws
