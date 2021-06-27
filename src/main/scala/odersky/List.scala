@@ -44,7 +44,7 @@ final case class ::[T](head : T, tail: List[T]) extends List[T] {
 
 object Main {
   def main(args : Array[String]): Unit = {
-    val list1 : List[Int] = ::(-1, ::(-2, ::(-3, ::(-4, Nil))))
+    val list1 : List[Int] = ::(-1, ::(-2, ::(-3, ::(-f4, Nil))))
     //val list2 : List[Int] = 1 :: 2 :: 3 :: Nil
 
     val list2 = list1.drop(2)
