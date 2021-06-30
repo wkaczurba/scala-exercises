@@ -16,12 +16,17 @@ import java.util.NoSuchElementException
     // This allows to handle different types in list; once a new element of different type is appended - a common supertype will be used.
     // def ::[U >: T](x : U): List[U] = new scala.::(x, this)
     def ::[U >: T](x: U): List[U] = {
-      print("Magic happening; we return list casted to a supertype")
       new ::(x, this)
     }
       // NOTE: param U >: T means U a supertype of list element T; we taken U, a supertype of T and return U-typpe.
       // this way we create a new list of common super type.
 
+    def :::[U >: T](prefix : List[U]) : List[U] = {
+      if (prefix.isEmpty) this
+      else prefix.head :: prefix.tail ::: this // HMmm... -> I am confused with this one.
+      // NOTE: Both ::: and :: end in a colon , they both bind to the right and are both right-associative.
+      //
+    }
   }
 
   // Nil object: extends >>Nothing<<
@@ -54,14 +59,23 @@ import java.util.NoSuchElementException
   }
 
   object ch22p22p2 {
+
+    abstract class Fruit
+    class Apple extends Fruit
+    class Orange extends Fruit
+    class Pear extends Fruit
+
     def main(args: Array[String]): Unit = {
-      abstract class Fruit
-      class Apple extends Fruit
-      class Orange extends Fruit
 
+      // NOrmal ::
       val apples = new Apple :: Nil
-      val fruits : List[Fruit] = new Orange :: apples
 
-      println(fruits)
+      val fruits1 : List[Fruit] = new Orange :: apples
+
+      val fruits2 : List[Fruit] = new Pear :: new Pear :: new Pear :: Nil
+
+      val longerList = fruits1 ::: fruits2;
+
+      println(longerList)
     }
   }
