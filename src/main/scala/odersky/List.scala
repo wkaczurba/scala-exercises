@@ -2,6 +2,8 @@ package odersky
 
 import java.util.NoSuchElementException
 
+import scala.collection.mutable.ListBuffer
+
   abstract class List[+T] { // +T: covariant, ch 19
     def isEmpty: Boolean
     def head: T
@@ -26,6 +28,18 @@ import java.util.NoSuchElementException
       else prefix.head :: prefix.tail ::: this // HMmm... -> I am confused with this one.
       // NOTE: Both ::: and :: end in a colon , they both bind to the right and are both right-associative.
       //
+    }
+
+HERE WE ARE STUCK:
+    def map[U]( f: T => U) : List[U] = {
+      // this will use listbuffer to make it more efficient:
+      val b = new ListBuffer[U] // a bit of a cheating in good cause...
+      if (this.isEmpty) return Nil
+      b += f(head)
+
+      b.toList // need to create a new list out of it (convert ListBuffer to our list...)
+
+
     }
   }
 
