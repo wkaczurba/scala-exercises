@@ -41,15 +41,17 @@ import scala.collection.mutable.ListBuffer
 
     // FIXME: Below is Odersky's implementation, need to convert ListBuffer to a list at the end...:
     // Recursive implementation of a list:
-//    def map[U](f: T => U) : List[U] = { // from Odersky's
-//      var b = new ListBuffer[U]
-//      var these = this
-//      while (!these.isEmpty) {
-//        b += f(these.head)
-//        these = these.tail
-//      }
-//      b.toList // TODO: Need to List function that creates
-//    }
+    def map[U](f: T => U) : List[U] = { // adopted from Odersky's
+      var b = new ListBuffer[U]
+      var these = this
+      while (!these.isEmpty) {
+        b += f(these.head)
+        these = these.tail
+      }
+//      var l : List[U] = List(b.toArray)
+      b.foldRight(Nil : List[U])(_ :: _)
+      //b.toList // TODO: Need to List function that creates
+    }
 
     override def toString: String = {
       val sb : StringBuilder = new StringBuilder("List=[");
@@ -62,6 +64,15 @@ import scala.collection.mutable.ListBuffer
         if (!current.isEmpty) sb.append(", ")
       }
       sb.append("]").toString()
+    }
+
+    // Adding an element to a list:
+    def += [U >: T] (e : U): List[U] = {
+      this ::: e :: Nil
+    }
+
+    def += [U >: T] (e : List[U]): List[U] = {
+      this ::: e ::: Nil
     }
   }
 
@@ -101,10 +112,23 @@ import scala.collection.mutable.ListBuffer
       val list3 = List(1, 2, 3, 4, 5)
       println("List with apply: " + list3)
 
+      val list4 = List(1, 2, 3, 4, 5)
+
 //      val l = Array(1,2,3,4)
 //      val s = l.foldLeft("0")(_.toString + "+" + _.toString);
 //      val s2 = l.foldRight("0")(_.toString + "+" + _.toString);
 //      println(s2)
+
+//      println("Adding element: " + (list4 += 100))
+//      println("Adding self: " + (list4 += list4))
+
+//      val list5 = list4 += 99;
+//      println("To string mapped: " + list5)
+
+      val list5 = list4 += 99;
+      println("Multiplication - slow to map " + list5.slowMapTo( x => x * 10))
+      println("Multiplication - normal map " + list5.map( x => x * 10))
+
     }
   }
 
