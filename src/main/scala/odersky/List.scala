@@ -10,10 +10,10 @@ import scala.collection.mutable.ListBuffer
     def tail: List[T]
     def length: Int = if (isEmpty) 0 else 1 + tail.length
 
-    def drop(n: Int): List[T] =
+    def takeRight(n: Int): List[T] = // adopted from Odersky's book.
       if (isEmpty) Nil
       else if (n <= 0) this
-      else tail.drop(n - 1)
+      else tail.takeRight(n - 1)
 
     // This allows to handle different types in list; once a new element of different type is appended - a common supertype will be used.
     // def ::[U >: T](x : U): List[U] = new scala.::(x, this)
@@ -53,6 +53,23 @@ import scala.collection.mutable.ListBuffer
       //b.toList // TODO: Need to List function that creates
     }
 
+    def filter(predicate: (T) => Boolean): List[T] = {
+      if (this.isEmpty) Nil
+      else if (predicate.apply(this.head)) head :: tail.filter(predicate)
+      else tail.filter(predicate)
+    }
+
+    def count(predicate: (T) => Boolean): Int = ???
+    def find (predicate: (T) => Boolean): Option[T] = ???
+    def exists(predicate: (T) => Boolean): Boolean = ???
+
+//    def collect(pfun: PartialFunction[A,B]): List[B] = ???
+//
+//    // Currying
+//    def foldLeft [B] (z: B) (operator: (B, A) => B): B = ???
+//    def foldRight [B] (z: B) (operator: (A, B) => B): B = ???
+
+
     override def toString: String = {
       val sb : StringBuilder = new StringBuilder("List=[");
       //var contents : T = Null;
@@ -75,6 +92,14 @@ import scala.collection.mutable.ListBuffer
       this ::: e ::: Nil
     }
 
+    def append[U >: T] (that : List[U]): Unit = {
+      this += that
+    }
+
+    def cons[U >: T](a: U): List[U] = {
+      a :: this
+    }
+
     // TODO: should return index of given element
     def indexOf[A](elem: A): Long = { // TODO: Discuss why I cant use "T" as a type?
       if (isEmpty) return -1L
@@ -90,6 +115,11 @@ import scala.collection.mutable.ListBuffer
     def take (n: Int) : List[T] = {
       if (n == 1) this.head::Nil
       else this.head :: tail.take(n-1)
+    }
+
+    def reverse(): List[T] = {
+      if (!tail.isEmpty) tail.reverse() += this.head
+      else Nil
     }
   }
 
@@ -150,6 +180,12 @@ import scala.collection.mutable.ListBuffer
       println("list5:" + list5.indexOf(99))
 
       println(list5.take(6))
+
+      val listX = List(10, 11, 12, 13, 14, 15, 16)
+      println(listX.reverse())
+
+      val listY = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+      println("Divadable by 3: " + listY.filter(x => x%3 == 0))
     }
   }
 
