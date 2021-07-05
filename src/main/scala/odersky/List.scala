@@ -30,16 +30,48 @@ import scala.collection.mutable.ListBuffer
       //
     }
 
-HERE WE ARE STUCK:
-    def map[U]( f: T => U) : List[U] = {
+    // FIXME: SUperbly inefficient mapper:
+    def slowMapTo[U](f: T => U) : List[U] = {
       // this will use listbuffer to make it more efficient:
-      val b = new ListBuffer[U] // a bit of a cheating in good cause...
+      //val b = new ListBuffer[U] // a bit of a cheating in good cause...
+
       if (this.isEmpty) return Nil
-      b += f(head)
+      f(head) :: this.tail.slowMapTo(f)
+    }
 
-      b.toList // need to create a new list out of it (convert ListBuffer to our list...)
+    // FIXME: Below is Odersky's implementation, need to convert ListBuffer to a list at the end...:
+    // Recursive implementation of a list:
+//    def map[U](f: T => U) : List[U] = { // from Odersky's
+//      var b = new ListBuffer[U]
+//      var these = this
+//      while (!these.isEmpty) {
+//        b += f(these.head)
+//        these = these.tail
+//      }
+//      b.toList // TODO: Need to List function that creates
+//    }
 
+    override def toString: String = {
+      val sb : StringBuilder = new StringBuilder("List=[");
+      //var contents : T = Null;
 
+      var current = this;
+      while (!current.isEmpty) {
+        sb.append(current.head.toString);
+        current = current.tail
+        if (!current.isEmpty) sb.append(", ")
+      }
+      sb.append("]").toString()
+    }
+  }
+
+  object List {
+    // FIXME: This is the other way-around
+    def apply[A](elems : A*): List[A] = {
+      var list : List[A] = Nil
+      for (e <- elems)
+        list = e :: list
+      list
     }
   }
 
@@ -67,14 +99,17 @@ HERE WE ARE STUCK:
 
       println(list1)
       println("After drop(2):")
-      println(list2)
+
+
+      val list3 = List(1, 2, 3, 4, 5)
+      println("List with apply: " + list3)
 
     }
   }
 
   object ch22p22p2 {
 
-    abstract class Fruit
+    abstract class Fruit;
     class Apple extends Fruit
     class Orange extends Fruit
     class Pear extends Fruit
@@ -91,5 +126,8 @@ HERE WE ARE STUCK:
       val longerList = fruits1 ::: fruits2;
 
       println(longerList)
+
+      println("Inefficient mapper:")
+      println(longerList.slowMapTo((x:Fruit) => x.toString.length ))
     }
   }
