@@ -74,6 +74,23 @@ import scala.collection.mutable.ListBuffer
     def += [U >: T] (e : List[U]): List[U] = {
       this ::: e ::: Nil
     }
+
+    // TODO: should return index of given element
+    def indexOf[A](elem: A): Long = { // TODO: Discuss why I cant use "T" as a type?
+      if (isEmpty) return -1L
+      if (head == elem) return 0L
+      tail.indexOf(elem) match {
+        case -1 => -1L
+        case x : Long => x + 1
+      }
+    }
+
+    // TODO: Returns first n elements of the list,
+    // if n > list size it will return the whole list
+    def take (n: Int) : List[T] = {
+      if (n == 1) this.head::Nil
+      else this.head :: tail.take(n-1)
+    }
   }
 
   object List {
@@ -129,6 +146,10 @@ import scala.collection.mutable.ListBuffer
       println("Multiplication - slow to map " + list5.slowMapTo( x => x * 10))
       println("Multiplication - normal map " + list5.map( x => x * 10))
 
+      println("list5:" + list5)
+      println("list5:" + list5.indexOf(99))
+
+      println(list5.take(6))
     }
   }
 
