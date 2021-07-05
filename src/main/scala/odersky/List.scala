@@ -68,10 +68,7 @@ import scala.collection.mutable.ListBuffer
   object List {
     // FIXME: This is the other way-around
     def apply[A](elems : A*): List[A] = {
-      var list : List[A] = Nil
-      for (e <- elems)
-        list = e :: list
-      list
+      return elems.foldRight(Nil : List[A])(_ :: _)
     }
   }
 
@@ -92,18 +89,22 @@ import scala.collection.mutable.ListBuffer
 
   object Main {
     def main(args: Array[String]): Unit = {
-      val list1: List[Int] = ::(-1, ::(-2, ::(-3, ::(-4, Nil))))
-      //val list2 : List[Int] = 1 :: 2 :: 3 :: Nil
-
-      val list2 = list1.drop(2)
-
-      println(list1)
-      println("After drop(2):")
-
-
+//      val list1: List[Int] = ::(-1, ::(-2, ::(-3, ::(-4, Nil))))
+//      //val list2 : List[Int] = 1 :: 2 :: 3 :: Nil
+//
+//      val list2 = list1.drop(2)
+//
+//      println(list1)
+//      println("After drop(2):")
+//
+//
       val list3 = List(1, 2, 3, 4, 5)
       println("List with apply: " + list3)
 
+//      val l = Array(1,2,3,4)
+//      val s = l.foldLeft("0")(_.toString + "+" + _.toString);
+//      val s2 = l.foldRight("0")(_.toString + "+" + _.toString);
+//      println(s2)
     }
   }
 
