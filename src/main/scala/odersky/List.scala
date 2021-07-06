@@ -59,11 +59,24 @@ import scala.collection.mutable.ListBuffer
       else tail.filter(predicate)
     }
 
-    def count(predicate: (T) => Boolean): Int = ???
-    def find (predicate: (T) => Boolean): Option[T] = ???
-    def exists(predicate: (T) => Boolean): Boolean = ???
+    def count(predicate: (T) => Boolean): Int = {
+      if (isEmpty) 0
+      else if (predicate.apply(head)) tail.count(predicate) + 1
+      else tail.count(predicate)
+    }
+    def find (predicate: (T) => Boolean): Option[T] = {
+      if (isEmpty) None
+      else if (predicate.apply(head)) Some (head)
+      else tail.find(predicate)
+    }
+    def exists(predicate: (T) => Boolean): Boolean = find(predicate).isDefined
 
-//    def collect(pfun: PartialFunction[A,B]): List[B] = ???
+
+    // Partial function
+    // creates a new collection by its partial application to all elements
+    // of given list where this function is defined
+    //def collect(pfun: PartialFunction[A,B]): List[B] = ???
+
 //
 //    // Currying
 //    def foldLeft [B] (z: B) (operator: (B, A) => B): B = ???
@@ -185,7 +198,18 @@ import scala.collection.mutable.ListBuffer
       println(listX.reverse())
 
       val listY = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-      println("Divadable by 3: " + listY.filter(x => x%3 == 0))
+      val predicate = (x : Int) => x % 3 == 0
+      println("Divadable by 3: " + listY.filter(predicate) + " count: " + listY.count(predicate))
+
+      println("Finding 4 in " + listY)
+      println(listY.find(x => x == 4) + "\n")
+
+      println("Finding 51123 in " + listY + "; result: " + listY.find(x => x == 51123))
+
+
+      println("Println testing exists(81): " + listY.exists(x => x == 81) + "\n")
+      println("Println testing exists(4): " + listY.exists(x => x == 4) + "\n")
+
     }
   }
 
