@@ -30,16 +30,12 @@ import scala.collection.mutable.ListBuffer
       //
     }
 
-    // FIXME: SUperbly inefficient mapper:
-    def slowMapTo[U](f: T => U) : List[U] = {
-      // this will use listbuffer to make it more efficient:
-      //val b = new ListBuffer[U] // a bit of a cheating in good cause...
-
+    def slowMapTo[U](f: T => U) : List[U] = { // SUperbly inefficient mapper:
       if (this.isEmpty) return Nil
       f(head) :: this.tail.slowMapTo(f)
     }
 
-    // FIXME: Below is Odersky's implementation, need to convert ListBuffer to a list at the end...:
+    // Below is adopted Odersky's implementation (more efficient); adopted conversion with foldRIght
     // Recursive implementation of a list:
     def map[U](f: T => U) : List[U] = { // adopted from Odersky's
       var b = new ListBuffer[U]
@@ -48,9 +44,7 @@ import scala.collection.mutable.ListBuffer
         b += f(these.head)
         these = these.tail
       }
-//      var l : List[U] = List(b.toArray)
       b.foldRight(Nil : List[U])(_ :: _)
-      //b.toList // TODO: Need to List function that creates
     }
 
     def filter(predicate: (T) => Boolean): List[T] = {
@@ -85,7 +79,6 @@ import scala.collection.mutable.ListBuffer
 
     override def toString: String = {
       val sb : StringBuilder = new StringBuilder("List=[");
-      //var contents : T = Null;
 
       var current = this;
       while (!current.isEmpty) {
@@ -113,11 +106,10 @@ import scala.collection.mutable.ListBuffer
       a :: this
     }
 
-    // TODO: should return index of given element
-    def indexOf[A](elem: A): Long = { // TODO: Discuss why I cant use "T" as a type?
+    def indexOf(elem: T): Long = {
       if (isEmpty) return -1L
-      if (head == elem) return 0L
-      tail.indexOf(elem) match {
+      else if (head == elem) return 0L
+      else tail.indexOf(elem) match {
         case -1 => -1L
         case x : Long => x + 1
       }
