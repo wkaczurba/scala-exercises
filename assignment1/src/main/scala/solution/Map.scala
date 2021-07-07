@@ -1,5 +1,6 @@
-package odersky
+package solution
 
+// WORK IN progress.
 case class Entry[K, V](key : K, value : V)
 
 object Entry {
