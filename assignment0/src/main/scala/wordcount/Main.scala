@@ -23,49 +23,19 @@ object Main {
     }
   }
 
-
   private def printHelp = println(Res.helpMessage)
 }
-
 
 // you may use this object to store some application-related
 // functions, but don't insist on that design
 object WordCount {
-  def countBytes(path: String): Any = { // TODO: FIXME does not look great.
-    val is = Files.newInputStream(Paths.get(path))
-    var count = 0: Long
-    var av = 0: Long
-    while ( {
-      av = is.available(); av
-    } > 0) {
-      count += is.skip(av)
-    }
-    count
-  }
-
-  def findLongestLine(buf: Source): Int = {
-      // buf.getLines().maxBy(_.length) -> returns longest line, but probably might consume much more memory
-    buf.getLines()
-      .map(line => line.length)
-      .max
-  }
-
-  def countLines(buf: Source): Int = {
-    buf.getLines().count(l => true)
-  }
-
-
-  def merge(sequence : Seq[Char]) = {
-    sequence.foldRight(List.empty[Char]) {
-      case ( a, b ) => a.isLetter && a.isLetter
-    }
-  }
-
-  def countWords(buf : Source): Int = {
+  def countBytes(path: String): Any = Files.size(Paths.get(path)) // scala.io doesnt deal well with bin files, so reverting to Java's lib.
+  def findLongestLine(buf: Source): Int = buf.getLines().map(line => line.length).max
+  def countLines(buf: Source): Int = buf.getLines().count(l => true)
+  def countWords(buf : Source): Int = { // TODO: while loop needs to be dropped
     var words = 0
 
-    buf.map(_.isLetter).foldLeft(false)(_ ^ _ =>)
-
+    //buf.map(_.isLetter).foldLeft(false)(_ ^ _ =>)
 
     while(buf.hasNext) {
       if (buf.next().isLetter) {
@@ -80,7 +50,6 @@ object WordCount {
 }
 
 object Res {
-
   // we do expect you to use multiline string with string
   // interpolation if (it is required)
   val helpMessage: String = """ wc -c <filename> prints the byte count
