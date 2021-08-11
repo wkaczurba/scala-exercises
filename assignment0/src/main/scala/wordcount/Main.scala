@@ -30,22 +30,12 @@ object Main {
 // functions, but don't insist on that design
 object WordCount {
   def countBytes(path: String): Any = Files.size(Paths.get(path)) // scala.io doesnt deal well with bin files, so reverting to Java's lib.
-  def findLongestLine(buf: Source): Int = buf.getLines().map(line => line.length).max
+  def findLongestLine(buf: Source): Int = buf.getLines().map(line => line.length).maxOption.getOrElse(0)
   def countLines(buf: Source): Int = buf.getLines().count(l => true)
-  def countWords(buf : Source): Int = { // TODO: while loop needs to be dropped
-    var words = 0
-
-    //buf.map(_.isLetter).foldLeft(false)(_ ^ _ =>)
-
-    while(buf.hasNext) {
-      if (buf.next().isLetter) {
-        words += 1
-      while (buf.hasNext && buf.next().isLetter) buf.next()
-      }
-    }
-    words
+  def countWords(buf : Source): Int = {
+    buf.map(x => if (x.isLetter) 1 else 0).foldLeft(List[Int]())(
+      (a: List[Int], b: Int) => if (a.nonEmpty && a.head == b) a else a.prepended(b)).sum
   }
-
   def countCharacters(buf : Source) : Int = buf.count(_ => true)
 }
 
