@@ -1,10 +1,7 @@
 package collections1
 
-object Collections1_ImmutableAndOption {
+object OptionLookinto {
 
-  // https://docs.scala-lang.org/overviews/collections/overview.html
-
-  //
   val x = Option("josh"); // TODO: fold to try.
 
   def main(args: Array[String]): Unit = {
@@ -12,5 +9,4 @@ object Collections1_ImmutableAndOption {
     println(x.get) ///
 
   }
-
 }
